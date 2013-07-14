@@ -12,47 +12,49 @@ import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FeedListAdapter extends BaseAdapter {
+    private List<SyndFeed> feedList;
     private SyndFeed feed;
     private Activity context;
 
-    public FeedListAdapter(Activity context) {
+    public FeedListAdapter(Activity context, final String[] feedUrlList) {
         this.context = context;
-
-        final String feedUrl = "http://alfalfalfa.com/index.rdf";
+        feedList = new ArrayList<SyndFeed>();
 
         final RssAtomFeedRetriever feedRetriever = new RssAtomFeedRetriever();
         (new Thread(new Runnable(){
             @Override
             public void run() {
-                feed = feedRetriever.getMostRecentNews(feedUrl);
+                for (String feedUrl : feedUrlList) {
+                    feed = feedRetriever.getMostRecentNews(feedUrl);
+                    feedList.add(feed);
+                }
             }
         })).start();
     }
 
-    public int getCount()
-    {
+    public int getCount() {
         if (feed == null) {
             return 0;
         }
         return feed.getEntries().size();
     }
 
-    public SyndEntry getItem(int index)
-    {
+    public SyndEntry getItem(int index) {
         if (feed == null) {
             return null;
         }
         return (SyndEntry) feed.getEntries().get(index);
     }
 
-    public long getItemId(int index)
-    {
+    public long getItemId(int index) {
         return index;
     }
 
-    public View getView(int index, View cellRenderer, ViewGroup viewGroup)
-    {
+    public View getView(int index, View cellRenderer, ViewGroup viewGroup) {
         NewsEntryCellView newsEntryCellView = (NewsEntryCellView) cellRenderer;
 
         if (cellRenderer == null)
@@ -64,30 +66,23 @@ public class FeedListAdapter extends BaseAdapter {
         return newsEntryCellView;
     }
 
-    public void click(int position)
-    {
+    public void click(int position) {
         String uri = getItem(position).getUri();
         Intent webIntent = new Intent("android.intent.action.VIEW", Uri.parse(uri));
         context.startActivity(webIntent);
     }
 
-    private class NewsEntryCellView
-        extends TableLayout
-    {
+    private class NewsEntryCellView extends TableLayout {
         private TextView titleTextView;
-
         private TextView dateTextView;
-
         private TextView summaryTextView;
 
-        public NewsEntryCellView()
-        {
+        public NewsEntryCellView() {
             super(context);
             createUI();
         }
 
-        private void createUI()
-        {
+        private void createUI() {
             setColumnShrinkable(0, false);
             setColumnStretchable(0, false);
             setColumnShrinkable(1, false);
@@ -111,8 +106,7 @@ public class FeedListAdapter extends BaseAdapter {
         }
 
 
-        public void display(int index)
-        {
+        public void display(int index) {
             SyndEntry entry = getItem(index);
             titleTextView.setText(entry.getTitle());
             dateTextView.setText(entry.getPublishedDate().toString());

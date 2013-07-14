@@ -9,24 +9,19 @@ import com.google.code.rome.android.repackaged.com.sun.syndication.io.FeedExcept
 import java.io.IOException;
 import java.net.URL;
 
-public class RssAtomFeedRetriever
-{
-    public SyndFeed getMostRecentNews( final String feedUrl )
-    {
-        try
-        {
-            return retrieveFeed( feedUrl );
+public class RssAtomFeedRetriever {
+    public SyndFeed getMostRecentNews(final String feedUrl) {
+        try {
+            return retrieveFeed(feedUrl);
         }
-        catch ( Exception e )
-        {
-            throw new RuntimeException( e );
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private SyndFeed retrieveFeed( final String feedUrl )
-        throws IOException, FeedException, FetcherException
-    {
+    private SyndFeed retrieveFeed(final String feedUrl)
+        throws IOException, FeedException, FetcherException {
         FeedFetcher feedFetcher = new HttpURLFeedFetcher();
-        return feedFetcher.retrieveFeed( new URL( feedUrl ) );
+        return feedFetcher.retrieveFeed(new URL(feedUrl));
     }
 }

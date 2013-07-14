@@ -19,7 +19,9 @@ public class MainActivity extends Activity {
     private View createList(Activity activity) {
         LinearLayout mainPanel = new LinearLayout(activity);
         ListView listView = new ListView(activity);
-        final FeedListAdapter feedListAdapter = new FeedListAdapter(activity);
+
+        String[] feedUrlList = getResources().getStringArray(R.array.feed_url_list);
+        final FeedListAdapter feedListAdapter = new FeedListAdapter(activity, feedUrlList);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
                 feedListAdapter.click(position);
