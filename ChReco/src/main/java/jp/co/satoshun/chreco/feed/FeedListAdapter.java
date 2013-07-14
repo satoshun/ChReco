@@ -11,50 +11,61 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
-import jp.co.satoshun.chreco.feed.RssAtomFeedRetriever;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeedListAdapter extends BaseAdapter {
-    private List<SyndFeed> feedList;
+    private List<SyndEntry> entryList;
     private SyndFeed feed;
     private Activity context;
 
-    public FeedListAdapter(Activity context, final String[] feedUrlList) {
+    public FeedListAdapter(final Activity context, final String[] feedUrlList) {
         this.context = context;
-        feedList = new ArrayList<SyndFeed>();
+        entryList = new ArrayList<SyndEntry>();
 
         final RssAtomFeedRetriever feedRetriever = new RssAtomFeedRetriever();
         (new Thread(new Runnable(){
             @Override
             public void run() {
+                //  TODO
                 for (String feedUrl : feedUrlList) {
                     feed = feedRetriever.getMostRecentNews(feedUrl);
-                    feedList.add(feed);
+                    entryList.add((SyndEntry) feed.getEntries().get(0));
                 }
+
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyDataSetChanged();
+                    }
+                });
             }
         })).start();
     }
 
+    @Override
     public int getCount() {
-        if (feed == null) {
+        if (entryList == null) {
             return 0;
         }
-        return feed.getEntries().size();
+        return entryList.size();
     }
 
+    @Override
     public SyndEntry getItem(int index) {
-        if (feed == null) {
+        if (entryList == null) {
             return null;
         }
-        return (SyndEntry) feed.getEntries().get(index);
+        return entryList.get(index);
     }
 
+    @Override
     public long getItemId(int index) {
         return index;
     }
 
+    @Override
     public View getView(int index, View cellRenderer, ViewGroup viewGroup) {
         NewsEntryCellView newsEntryCellView = (NewsEntryCellView) cellRenderer;
 

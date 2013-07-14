@@ -13,6 +13,7 @@ import jp.co.satoshun.chreco.service.FeedServiceComponent;
 
 public class MainActivity extends Activity {
     FeedServiceComponent feedService = new FeedServiceComponent();
+    FeedListAdapter feedListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,8 @@ public class MainActivity extends Activity {
         ListView listView = new ListView(activity);
 
         String[] feedUrlList = getResources().getStringArray(R.array.feed_url_list);
-        final FeedListAdapter feedListAdapter = new FeedListAdapter(activity, feedUrlList);
+        feedListAdapter = new FeedListAdapter(activity, feedUrlList);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
                 Intent i = new Intent(MainActivity.this, WebViewActivity.class);
@@ -35,8 +37,10 @@ public class MainActivity extends Activity {
                 startActivity(i);
             }
         });
+
         listView.setAdapter(feedListAdapter);
         mainPanel.addView(listView);
+
         return mainPanel;
     }
 
