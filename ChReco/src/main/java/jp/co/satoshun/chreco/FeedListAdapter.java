@@ -57,8 +57,7 @@ public class FeedListAdapter extends BaseAdapter {
     public View getView(int index, View cellRenderer, ViewGroup viewGroup) {
         NewsEntryCellView newsEntryCellView = (NewsEntryCellView) cellRenderer;
 
-        if (cellRenderer == null)
-        {
+        if (cellRenderer == null) {
             newsEntryCellView = new NewsEntryCellView();
         }
 
@@ -74,7 +73,6 @@ public class FeedListAdapter extends BaseAdapter {
 
     private class NewsEntryCellView extends TableLayout {
         private TextView titleTextView;
-        private TextView dateTextView;
         private TextView summaryTextView;
 
         public NewsEntryCellView() {
@@ -83,33 +81,34 @@ public class FeedListAdapter extends BaseAdapter {
         }
 
         private void createUI() {
+            setTableLayout();
+            addTitle();
+            addSummary();
+        }
+
+        private void setTableLayout() {
             setColumnShrinkable(0, false);
             setColumnStretchable(0, false);
             setColumnShrinkable(1, false);
-            setColumnStretchable(1, false);
-            setColumnShrinkable(2, false);
-            setColumnStretchable(2, true);
-
+            setColumnStretchable(1, true);
             setPadding(10, 10, 10, 10);
+        }
 
+        private void addTitle() {
             titleTextView = new TextView(context);
             titleTextView.setPadding(10, 10, 10, 10);
             addView(titleTextView);
+        }
 
-            dateTextView = new TextView(context);
-            dateTextView.setPadding(10, 10, 10, 10);
-            addView(dateTextView);
-
+        private void addSummary() {
             summaryTextView = new TextView(context);
             summaryTextView.setPadding(10, 10, 10, 10);
             addView(summaryTextView);
         }
 
-
         public void display(int index) {
             SyndEntry entry = getItem(index);
             titleTextView.setText(entry.getTitle());
-            dateTextView.setText(entry.getPublishedDate().toString());
             summaryTextView.setText(entry.getDescription().getValue());
         }
     }
