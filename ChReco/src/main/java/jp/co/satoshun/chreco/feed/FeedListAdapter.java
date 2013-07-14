@@ -11,6 +11,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
+import jp.co.satoshun.chreco.WebViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,9 @@ public class FeedListAdapter extends BaseAdapter {
                 //  TODO
                 for (String feedUrl : feedUrlList) {
                     feed = feedRetriever.getMostRecentNews(feedUrl);
-                    entryList.add((SyndEntry) feed.getEntries().get(0));
+                    for (Object entry : feed.getEntries()) {
+                        entryList.add((SyndEntry) entry);
+                    }
                 }
 
                 context.runOnUiThread(new Runnable() {
@@ -77,14 +80,10 @@ public class FeedListAdapter extends BaseAdapter {
         return newsEntryCellView;
     }
 
-    public Uri getUri(int position) {
-        return Uri.parse(getItem(position).getUri());
-    }
-
     public void click(int position) {
-        String uri = getItem(position).getUri();
-        Intent webIntent = new Intent("android.intent.action.VIEW", Uri.parse(uri));
-        context.startActivity(webIntent);
+        Intent i = new Intent(context, WebViewActivity.class);
+        i.setData(Uri.parse(getItem(position).getLink()));
+        context.startActivity(i);
     }
 
     private class NewsEntryCellView extends TableLayout {
@@ -99,14 +98,11 @@ public class FeedListAdapter extends BaseAdapter {
         private void createUI() {
             setTableLayout();
             addTitle();
-            addSummary();
         }
 
         private void setTableLayout() {
             setColumnShrinkable(0, false);
-            setColumnStretchable(0, false);
-            setColumnShrinkable(1, false);
-            setColumnStretchable(1, true);
+            setColumnStretchable(0, true);
             setPadding(10, 10, 10, 10);
         }
 
@@ -125,7 +121,7 @@ public class FeedListAdapter extends BaseAdapter {
         public void display(int index) {
             SyndEntry entry = getItem(index);
             titleTextView.setText(entry.getTitle());
-            summaryTextView.setText(entry.getDescription().getValue());
+            // summaryTextView.setText(entry.getDescription().getValue());
         }
     }
 }
