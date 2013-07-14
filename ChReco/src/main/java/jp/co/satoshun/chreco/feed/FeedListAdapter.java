@@ -1,4 +1,4 @@
-package jp.co.satoshun.chreco;
+package jp.co.satoshun.chreco.feed;
 
 
 import android.app.Activity;
@@ -11,6 +11,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
+import jp.co.satoshun.chreco.feed.RssAtomFeedRetriever;
 
 import java.util.ArrayList;
 import java.util.List;

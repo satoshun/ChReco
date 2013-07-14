@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import jp.co.satoshun.chreco.feed.FeedListAdapter;
 import jp.co.satoshun.chreco.service.FeedServiceComponent;
 
 public class MainActivity extends Activity {

@@ -1,4 +1,4 @@
-package jp.co.satoshun.chreco;
+package jp.co.satoshun.chreco.feed;
 
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import com.google.code.rome.android.repackaged.com.sun.syndication.fetcher.FeedFetcher;
