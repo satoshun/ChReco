@@ -13,8 +13,7 @@ public class RssAtomFeedRetriever {
     public SyndFeed getMostRecentNews(final String feedUrl) {
         try {
             return retrieveFeed(feedUrl);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
