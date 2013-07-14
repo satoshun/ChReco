@@ -1,20 +1,35 @@
 package jp.co.satoshun.chreco;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import jp.co.satoshun.chreco.service.IFeedRetrieverService;
 
 public class MainActivity extends Activity {
+    private IFeedRetrieverService feedRetrieverService;
+    private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            feedRetrieverService = IFeedRetrieverService.Stub.asInterface(service);
+        }
+        public void onServiceDisconnected(ComponentName name) {
+            feedRetrieverService = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(createList(this));
+
+        bindService(new Intent(this, FeedRetrieverService.class), null, feedRetrieverConnection, Context.BIND_AUTO_CREATE);
     }
 
     private View createList(Activity activity) {

@@ -31,6 +31,9 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".service.FeedRetrieverService"
+            android:label="@string/app_service_name" />
     </application>
     
     <uses-permission android:name="android.permission.INTERNET"/>
