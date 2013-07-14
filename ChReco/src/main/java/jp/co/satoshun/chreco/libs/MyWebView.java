@@ -18,6 +18,7 @@ public class MyWebView extends WebView {
         WebSettings settings = getSettings();
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
+        setVerticalScrollbarOverlay(true);
         requestFocus(View.FOCUS_DOWN);
 
         setWebViewClient(new WebViewClient() {
