@@ -1,35 +1,24 @@
 package jp.co.satoshun.chreco;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import jp.co.satoshun.chreco.service.IFeedRetrieverService;
+import jp.co.satoshun.chreco.service.FeedServiceComponent;
 
 public class MainActivity extends Activity {
-    private IFeedRetrieverService feedRetrieverService;
-    private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            feedRetrieverService = IFeedRetrieverService.Stub.asInterface(service);
-        }
-        public void onServiceDisconnected(ComponentName name) {
-            feedRetrieverService = null;
-        }
-    };
+    FeedServiceComponent feedService = new FeedServiceComponent();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(createList(this));
 
-        bindService(new Intent(this, FeedRetrieverService.class), null, feedRetrieverConnection, Context.BIND_AUTO_CREATE);
+        feedService.bindService(this);
     }
 
     private View createList(Activity activity) {
@@ -55,5 +44,11 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        feedService.unBindService(this);
     }
 }
