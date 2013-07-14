@@ -9,7 +9,7 @@ import android.os.IBinder;
 
 public class FeedServiceComponent {
     private IFeedRetrieverService feedRetrieverService;
-        private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
+    private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             feedRetrieverService = IFeedRetrieverService.Stub.asInterface(service);
         }
