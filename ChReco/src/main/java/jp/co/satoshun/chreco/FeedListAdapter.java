@@ -65,6 +65,10 @@ public class FeedListAdapter extends BaseAdapter {
         return newsEntryCellView;
     }
 
+    public Uri getUri(int position) {
+        return Uri.parse(getItem(position).getUri());
+    }
+
     public void click(int position) {
         String uri = getItem(position).getUri();
         Intent webIntent = new Intent("android.intent.action.VIEW", Uri.parse(uri));

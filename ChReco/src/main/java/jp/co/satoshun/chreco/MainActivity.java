@@ -1,6 +1,7 @@
 package jp.co.satoshun.chreco;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -24,7 +25,9 @@ public class MainActivity extends Activity {
         final FeedListAdapter feedListAdapter = new FeedListAdapter(activity, feedUrlList);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
-                feedListAdapter.click(position);
+                Intent i = new Intent(MainActivity.this, WebViewActivity.class);
+                i.setData(feedListAdapter.getUri(position));
+                startActivity(i);
             }
         });
         listView.setAdapter(feedListAdapter);
