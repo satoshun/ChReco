@@ -27,4 +27,7 @@ public class FeedServiceComponent {
             context.unbindService(feedRetrieverConnection);
         }
     }
+
+    public void get() {
+    }
 }

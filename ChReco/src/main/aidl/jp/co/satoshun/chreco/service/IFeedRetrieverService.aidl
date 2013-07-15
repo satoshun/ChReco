@@ -2,6 +2,6 @@ package jp.co.satoshun.chreco.service;
 
 
 interface IFeedRetrieverService {
-    List<SyndEntry> getSyndEntryList();
+    void retriveSyndEntryList(in List<String> feedUrlList);
     void renewSyndEntryList();
 }
