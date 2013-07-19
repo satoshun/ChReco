@@ -24,7 +24,6 @@ public class MainActivity extends Activity {
 
         feedUrlList = getResources().getStringArray(R.array.feed_url_list);
         feedService.bindService(this);
-
         feedService.retriveSyndEntryList(new ArrayList(Arrays.asList(feedUrlList)));
 
         setContentView(createList(this));

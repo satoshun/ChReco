@@ -1,5 +1,6 @@
 package jp.co.satoshun.chreco.feed;
 
+import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import com.google.code.rome.android.repackaged.com.sun.syndication.fetcher.FeedFetcher;
 import com.google.code.rome.android.repackaged.com.sun.syndication.fetcher.FetcherException;
@@ -8,6 +9,7 @@ import com.google.code.rome.android.repackaged.com.sun.syndication.io.FeedExcept
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class RssAtomFeedRetriever {
     public SyndFeed getMostRecentNews(final String feedUrl) {

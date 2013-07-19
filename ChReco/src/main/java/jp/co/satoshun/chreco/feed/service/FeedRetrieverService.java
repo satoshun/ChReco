@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
+import jp.co.satoshun.chreco.feed.Feed;
+import jp.co.satoshun.chreco.feed.IFeedRetriever;
 import jp.co.satoshun.chreco.feed.RssAtomFeedRetriever;
 import jp.co.satoshun.chreco.service.IFeedRetrieverService;
 
@@ -18,18 +20,18 @@ import java.util.List;
 
 public class FeedRetrieverService extends Service {
     private List<SyndEntry> entryList;
+    private IFeedRetriever feedRetriever;
 
     private final IFeedRetrieverService.Stub binder = new IFeedRetrieverService.Stub() {
         @Override
         public void retriveSyndEntryList(List<String> feedUrlList) {
-            final RssAtomFeedRetriever feedRetriever = new RssAtomFeedRetriever();
+            final RssAtomFeedRetriever retriver = new RssAtomFeedRetriever();
             entryList = new ArrayList<SyndEntry>();
             for (String feedUrl : feedUrlList) {
-                SyndFeed feed = feedRetriever.getMostRecentNews(feedUrl);
+                SyndFeed feed = retriver.getMostRecentNews(feedUrl);
                 entryList.addAll((List<SyndEntry>) feed.getEntries());
             }
-
-            FeedServiceComponent.feedRetriever.feedCallback(entryList);
+            feedRetriever.feedCallback(entryList);
         }
 
         @Override
@@ -40,6 +42,7 @@ public class FeedRetrieverService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        feedRetriever = Feed.feedRetriever;
         entryList = new ArrayList<SyndEntry>();
     }
 

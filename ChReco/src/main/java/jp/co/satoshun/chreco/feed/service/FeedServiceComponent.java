@@ -7,19 +7,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
-import jp.co.satoshun.chreco.feed.IFeedRetriever;
 import jp.co.satoshun.chreco.service.IFeedRetrieverService;
 
 import java.util.List;
 
 public class FeedServiceComponent {
-    public static IFeedRetriever feedRetriever = new IFeedRetriever() {
-        public void feedCallback(List<SyndEntry> entryList) {
-
-        }
-    };
-
     private IFeedRetrieverService feedRetrieverService;
 
     private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
