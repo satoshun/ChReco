@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import jp.co.satoshun.chreco.feed.Feed;
 import jp.co.satoshun.chreco.feed.FeedListAdapter;
-import jp.co.satoshun.chreco.feed.service.FeedServiceComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends Activity {
-    FeedServiceComponent feedService = new FeedServiceComponent();
     FeedListAdapter feedListAdapter;
+    Feed feed;
     String[] feedUrlList;
 
     @Override
@@ -23,8 +23,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         feedUrlList = getResources().getStringArray(R.array.feed_url_list);
-        feedService.bindService(this);
-        feedService.retriveSyndEntryList(new ArrayList(Arrays.asList(feedUrlList)));
+        feed = new Feed(this, new ArrayList(Arrays.asList(feedUrlList)));
 
         setContentView(createList(this));
     }
@@ -57,6 +56,6 @@ public class MainActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        feedService.unBindService(this);
+        feed.unBindService(this);
     }
 }
