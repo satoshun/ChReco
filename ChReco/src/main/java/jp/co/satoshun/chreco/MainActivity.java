@@ -8,25 +8,32 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import jp.co.satoshun.chreco.feed.FeedListAdapter;
-import jp.co.satoshun.chreco.service.FeedServiceComponent;
+import jp.co.satoshun.chreco.feed.service.FeedServiceComponent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends Activity {
     FeedServiceComponent feedService = new FeedServiceComponent();
     FeedListAdapter feedListAdapter;
+    String[] feedUrlList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(createList(this));
 
+        feedUrlList = getResources().getStringArray(R.array.feed_url_list);
         feedService.bindService(this);
+
+        feedService.retriveSyndEntryList(new ArrayList(Arrays.asList(feedUrlList)));
+
+        setContentView(createList(this));
     }
 
     private View createList(Activity activity) {
         LinearLayout mainPanel = new LinearLayout(activity);
         ListView listView = new ListView(activity);
 
-        String[] feedUrlList = getResources().getStringArray(R.array.feed_url_list);
         feedListAdapter = new FeedListAdapter(activity, feedUrlList);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

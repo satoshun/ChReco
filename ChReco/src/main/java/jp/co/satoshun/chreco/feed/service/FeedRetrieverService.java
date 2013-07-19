@@ -1,4 +1,8 @@
-package jp.co.satoshun.chreco.service;
+package jp.co.satoshun.chreco.feed.service;
+
+/*
+ *
+ */
 
 
 import android.app.Service;
@@ -7,6 +11,7 @@ import android.os.IBinder;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import jp.co.satoshun.chreco.feed.RssAtomFeedRetriever;
+import jp.co.satoshun.chreco.service.IFeedRetrieverService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,8 @@ public class FeedRetrieverService extends Service {
                 SyndFeed feed = feedRetriever.getMostRecentNews(feedUrl);
                 entryList.addAll((List<SyndEntry>) feed.getEntries());
             }
+
+            FeedServiceComponent.feedRetriever.feedCallback(entryList);
         }
 
         @Override

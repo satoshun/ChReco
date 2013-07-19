@@ -2,9 +2,10 @@
 <resources>
 
     <string name="app_name">2Ch Recommend</string>
-    <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="app_service_name">2ChReco service</string>
+
+    <string name="action_settings">Settings</string>
 
     <string-array name="feed_url_list">
         <item>http://blog.livedoor.jp/dqnplus/atom.xml</item>
