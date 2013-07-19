@@ -7,23 +7,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import jp.co.satoshun.chreco.feed.Feed;
 import jp.co.satoshun.chreco.feed.FeedListAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends Activity {
     FeedListAdapter feedListAdapter;
-    Feed feed;
     String[] feedUrlList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         feedUrlList = getResources().getStringArray(R.array.feed_url_list);
-        feed = new Feed(this, new ArrayList(Arrays.asList(feedUrlList)));
 
         setContentView(createList(this));
     }
@@ -56,6 +49,6 @@ public class MainActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        feed.unBindService(this);
+        feedListAdapter.unBindService(this);
     }
 }

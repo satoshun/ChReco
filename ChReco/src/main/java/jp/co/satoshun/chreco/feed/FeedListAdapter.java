@@ -14,21 +14,25 @@ import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.Syn
 import jp.co.satoshun.chreco.WebViewActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FeedListAdapter extends BaseAdapter {
     private List<SyndEntry> entryList;
-    private SyndFeed feed;
     private Activity context;
+    private Feed feeds;
 
     public FeedListAdapter(final Activity context, final String[] feedUrlList) {
         this.context = context;
         entryList = new ArrayList<SyndEntry>();
 
+        feeds = new Feed(context, new ArrayList(Arrays.asList(feedUrlList)));
+
         final RssAtomFeedRetriever feedRetriever = new RssAtomFeedRetriever();
         (new Thread(new Runnable(){
             @Override
             public void run() {
+                SyndFeed feed;
                 //  TODO
                 for (String feedUrl : feedUrlList) {
                     feed = feedRetriever.getMostRecentNews(feedUrl);
@@ -45,6 +49,10 @@ public class FeedListAdapter extends BaseAdapter {
                 });
             }
         })).start();
+    }
+
+    public void unBindService(Activity context) {
+        feeds.unBindService(context);
     }
 
     @Override
