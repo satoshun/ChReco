@@ -1,6 +1,8 @@
 package jp.co.satoshun.chreco;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -11,12 +13,15 @@ import jp.co.satoshun.chreco.feed.FeedListAdapter;
 
 public class MainActivity extends Activity {
     FeedListAdapter feedListAdapter;
+    Dialog dialog = null;
     String[] feedUrlList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         feedUrlList = getResources().getStringArray(R.array.feed_url_list);
+
+        dialog = DialogManager.getInstance(getApplicationContext());
 
         setContentView(createList(this));
     }
