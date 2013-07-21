@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         feedUrlList = getResources().getStringArray(R.array.feed_url_list);
 
-        dialog = DialogManager.getInstance(getApplicationContext());
+        dialog = DialogManager.getInstance(this);
 
         setContentView(createList(this));
     }

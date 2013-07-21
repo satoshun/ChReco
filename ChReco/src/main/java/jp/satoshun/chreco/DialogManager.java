@@ -20,9 +20,13 @@ class DialogManager {
         return instance; 
     }
 
+    public static void release() {
+        instance = null;
+    }
+
     private static class WaitingDialog extends Dialog {
         public WaitingDialog(Context context) {
-            super(context, R.style.WaitingDialog);
+            super(context);
             setContentView(R.layout.waiting_dialog);
             setCancelable(false);
         }
