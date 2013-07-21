@@ -1,4 +1,4 @@
-package jp.co.satoshun.chreco.feed.service;
+package jp.satoshun.chreco.feed.service;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -7,16 +7,25 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-import jp.co.satoshun.chreco.service.IFeedRetrieverService;
+import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
+import jp.satoshun.chreco.service.IFeedObserver;
+import jp.satoshun.chreco.service.IFeedRetrieverService;
 
 import java.util.List;
 
 public class FeedServiceComponent {
     private IFeedRetrieverService feedRetrieverService;
+    private List<String> feedUrlList;
+
+    public FeedServiceComponent(final Activity context, List<String> feedUrlList) {
+        bindService(context);
+        this.feedUrlList = feedUrlList;
+    }
 
     private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             feedRetrieverService = IFeedRetrieverService.Stub.asInterface(service);
+            retriveSyndEntryList(feedUrlList);
         }
         public void onServiceDisconnected(ComponentName name) {
             feedRetrieverService = null;
@@ -43,6 +52,20 @@ public class FeedServiceComponent {
         }
     }
 
-    public void get() {
+    /*
+     * set service
+     */
+    public void setObserver(IFeedObserver target) {
+        if (feedRetrieverService != null) {
+            try {
+                feedRetrieverService.setObserver(target);
+            } catch(RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<SyndEntry> getEntryList() {
+        return FeedRetrieverService.getEntryList();
     }
 }

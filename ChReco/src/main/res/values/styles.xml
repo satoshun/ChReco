@@ -18,7 +18,8 @@
     </style>
 
     <style name="WaitingDialog" parent="android:Theme.Dialog">
-        
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
 </resources>

@@ -1,11 +1,11 @@
-package jp.co.satoshun.chreco;
+package jp.satoshun.chreco;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
-import jp.co.satoshun.chreco.libs.MyWebView;
+import jp.satoshun.chreco.libs.MyWebView;
 
 public class WebViewActivity extends Activity {
     LinearLayout layout;

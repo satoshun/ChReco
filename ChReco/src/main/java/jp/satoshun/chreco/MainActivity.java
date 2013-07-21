@@ -1,15 +1,14 @@
-package jp.co.satoshun.chreco;
+package jp.satoshun.chreco;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import jp.co.satoshun.chreco.feed.FeedListAdapter;
+import jp.satoshun.chreco.feed.FeedListAdapter;
 
 public class MainActivity extends Activity {
     FeedListAdapter feedListAdapter;
@@ -31,7 +30,7 @@ public class MainActivity extends Activity {
         ListView listView = new ListView(activity);
 
         feedListAdapter = new FeedListAdapter(activity, feedUrlList);
-
+        
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
                 feedListAdapter.click(position);

@@ -1,4 +1,4 @@
-package jp.co.satoshun.chreco.feed.service;
+package jp.satoshun.chreco.feed.service;
 
 /*
  *
@@ -8,41 +8,56 @@ package jp.co.satoshun.chreco.feed.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteException;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
-import jp.co.satoshun.chreco.feed.Feed;
-import jp.co.satoshun.chreco.feed.IFeedRetriever;
-import jp.co.satoshun.chreco.feed.RssAtomFeedRetriever;
-import jp.co.satoshun.chreco.service.IFeedRetrieverService;
+import jp.satoshun.chreco.feed.RssAtomFeedRetriever;
+import jp.satoshun.chreco.service.IFeedObserver;
+import jp.satoshun.chreco.service.IFeedRetrieverService;
+import jp.satoshun.chreco.libs.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeedRetrieverService extends Service {
-    private List<SyndEntry> entryList;
-    private IFeedRetriever feedRetriever;
+    private static List<SyndEntry> entryList;
+    public static List<SyndEntry> getEntryList() {
+        return entryList;
+    }
+
+    private IFeedObserver observer;
 
     private final IFeedRetrieverService.Stub binder = new IFeedRetrieverService.Stub() {
         @Override
         public void retriveSyndEntryList(List<String> feedUrlList) {
-            final RssAtomFeedRetriever retriver = new RssAtomFeedRetriever();
+            final RssAtomFeedRetriever retriever = new RssAtomFeedRetriever();
             entryList = new ArrayList<SyndEntry>();
+
+            Logger.e();
+
             for (String feedUrl : feedUrlList) {
-                SyndFeed feed = retriver.getMostRecentNews(feedUrl);
+                SyndFeed feed = retriever.getMostRecentNews(feedUrl);
                 entryList.addAll((List<SyndEntry>) feed.getEntries());
             }
-            feedRetriever.feedCallback(entryList);
+
+            if (observer != null) {
+                try {
+                    observer.notifyDataSetChanged();
+                } catch(RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override
-        public void renewSyndEntryList() {
+        public void setObserver(IFeedObserver target) {
+            observer = target;
         }
     };
 
     @Override
     public void onCreate() {
         super.onCreate();
-        feedRetriever = Feed.feedRetriever;
         entryList = new ArrayList<SyndEntry>();
     }
 
@@ -55,9 +70,4 @@ public class FeedRetrieverService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
-
-    // @Override
-    // public int onStartCommand(Intent intent, int flags, int startId) {
-    //     return super.onStartCommand(intent, flags, startId);
-    // }
 }

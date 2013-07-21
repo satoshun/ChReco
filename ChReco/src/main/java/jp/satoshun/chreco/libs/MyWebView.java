@@ -1,4 +1,4 @@
-package jp.co.satoshun.chreco.libs;
+package jp.satoshun.chreco.libs;
 
 
 import android.content.Context;

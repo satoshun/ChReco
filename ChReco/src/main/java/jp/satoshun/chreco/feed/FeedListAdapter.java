@@ -1,9 +1,10 @@
-package jp.co.satoshun.chreco.feed;
+package jp.satoshun.chreco.feed;
 
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,7 +12,10 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
-import jp.co.satoshun.chreco.WebViewActivity;
+import jp.satoshun.chreco.WebViewActivity;
+import jp.satoshun.chreco.feed.service.FeedServiceComponent;
+import jp.satoshun.chreco.libs.Logger;
+import jp.satoshun.chreco.service.IFeedObserver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,56 +23,82 @@ import java.util.List;
 
 public class FeedListAdapter extends BaseAdapter {
     private List<SyndEntry> entryList;
+    private FeedServiceComponent feedComponent;
     private Activity context;
-    private Feed feeds;
+
+    private final IFeedObserver observer = new IFeedObserver() {
+        @Override
+        public void notifyDataSetChanged() {
+            entryList = feedComponent.getEntryList();
+            Logger.e();
+
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+        @Override
+        public IBinder asBinder() {
+            return null;
+        }
+    };
 
     public FeedListAdapter(final Activity context, final String[] feedUrlList) {
+        Logger.e();
+
         this.context = context;
         entryList = new ArrayList<SyndEntry>();
+        feedComponent = new FeedServiceComponent(context, new ArrayList(Arrays.asList(feedUrlList)));
+        feedComponent.setObserver(observer);
 
-        feeds = new Feed(context, new ArrayList(Arrays.asList(feedUrlList)));
+        // (new Thread(new Runnable(){
+        //     @Override
+        //     public void run() {
+        //         SyndFeed feed;
+        //         //  TODO
+        //         for (String feedUrl : feedUrlList) {
+        //             feed = feedRetriever.getMostRecentNews(feedUrl);
+        //             for (Object entry : feed.getEntries()) {
+        //                 entryList.add((SyndEntry) entry);
+        //             }
+        //         }
+        //         context.runOnUiThread(new Runnable() {
+        //             @Override
+        //             public void run() {
+        //                 notifyDataSetChanged();
+        //             }
+        //         });
+        //     }
+        // })).start();
 
-        final RssAtomFeedRetriever feedRetriever = new RssAtomFeedRetriever();
-        (new Thread(new Runnable(){
-            @Override
-            public void run() {
-                SyndFeed feed;
-                //  TODO
-                for (String feedUrl : feedUrlList) {
-                    feed = feedRetriever.getMostRecentNews(feedUrl);
-                    for (Object entry : feed.getEntries()) {
-                        entryList.add((SyndEntry) entry);
-                    }
-                }
+    }
 
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataSetChanged();
-                    }
-                });
-            }
-        })).start();
+    public List<SyndEntry> getEntryList() {
+        return entryList;
     }
 
     public void unBindService(Activity context) {
-        feeds.unBindService(context);
+        feedComponent.unBindService(context);
     }
 
     @Override
     public int getCount() {
-        if (entryList == null) {
+        if (getEntryList() == null) {
             return 0;
         }
-        return entryList.size();
+
+        return getEntryList().size();
     }
 
     @Override
     public SyndEntry getItem(int index) {
-        if (entryList == null) {
+        if (getEntryList() == null) {
             return null;
         }
-        return entryList.get(index);
+        return getEntryList().get(index);
     }
 
     @Override
