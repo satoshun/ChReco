@@ -22,14 +22,14 @@ public class MainActivity extends Activity {
 
         dialog = DialogManager.getInstance(this);
 
-        setContentView(createList(this));
+        setContentView(createList());
     }
 
-    private View createList(Activity activity) {
-        LinearLayout mainPanel = new LinearLayout(activity);
-        ListView listView = new ListView(activity);
+    private View createList() {
+        LinearLayout mainPanel = new LinearLayout(this);
+        ListView listView = new ListView(this);
 
-        feedListAdapter = new FeedListAdapter(activity, feedUrlList);
+        feedListAdapter = new FeedListAdapter(this, feedUrlList);
         
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
@@ -48,6 +48,11 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override

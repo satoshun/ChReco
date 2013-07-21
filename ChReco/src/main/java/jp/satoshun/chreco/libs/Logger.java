@@ -14,6 +14,13 @@ public class Logger {
         }
     }
 
+    public static void e(String msg) {
+        if (debug) {
+            Log.e(TAG, msg);
+            Log.e(TAG, getMetaInfo());
+        }
+    }
+
     private static String getMetaInfo(){
          // スタックトレースから情報を取得 // 0: VM, 1: Thread, 2: LogUtil#getMetaInfo, 3: LogUtil#d など, 4: 呼び出し元
          final StackTraceElement element = Thread.currentThread().getStackTrace()[4];

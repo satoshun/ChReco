@@ -36,8 +36,8 @@
         </activity>
 
         <service
-            android:enabled="true"
-            android:name="jp.satoshun.chreco.service.FeedRetrieverService" />
+            android:name="jp.satoshun.chreco.feed.service.FeedRetrieverService"
+            android:process=".service" />
     </application>
     
     <uses-permission android:name="android.permission.INTERNET"/>

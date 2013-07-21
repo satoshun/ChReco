@@ -1,8 +1,8 @@
-package jp.satoshun.chreco.feed.service;
-
 /*
  *
  */
+
+package jp.satoshun.chreco.feed.service;
 
 
 import android.app.Service;
@@ -12,9 +12,8 @@ import android.os.RemoteException;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import jp.satoshun.chreco.feed.RssAtomFeedRetriever;
-import jp.satoshun.chreco.service.IFeedObserver;
-import jp.satoshun.chreco.service.IFeedRetrieverService;
 import jp.satoshun.chreco.libs.Logger;
+import jp.satoshun.chreco.service.IFeedObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +29,11 @@ public class FeedRetrieverService extends Service {
     private final IFeedRetrieverService.Stub binder = new IFeedRetrieverService.Stub() {
         @Override
         public void retriveSyndEntryList(List<String> feedUrlList) {
-            final RssAtomFeedRetriever retriever = new RssAtomFeedRetriever();
-            entryList = new ArrayList<SyndEntry>();
-
             Logger.e();
 
+            final RssAtomFeedRetriever retriever = new RssAtomFeedRetriever();
+            entryList = new ArrayList<SyndEntry>();
+            
             for (String feedUrl : feedUrlList) {
                 SyndFeed feed = retriever.getMostRecentNews(feedUrl);
                 entryList.addAll((List<SyndEntry>) feed.getEntries());
@@ -68,6 +67,7 @@ public class FeedRetrieverService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Logger.e();
         return binder;
     }
 }

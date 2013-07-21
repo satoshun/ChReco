@@ -1,4 +1,4 @@
-package jp.satoshun.chreco.service;
+package jp.satoshun.chreco.feed.service;
 
 import jp.satoshun.chreco.service.IFeedObserver;
 

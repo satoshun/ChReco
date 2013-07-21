@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
-import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import jp.satoshun.chreco.WebViewActivity;
 import jp.satoshun.chreco.feed.service.FeedServiceComponent;
 import jp.satoshun.chreco.libs.Logger;
@@ -47,12 +46,10 @@ public class FeedListAdapter extends BaseAdapter {
     };
 
     public FeedListAdapter(final Activity context, final String[] feedUrlList) {
-        Logger.e();
-
         this.context = context;
         entryList = new ArrayList<SyndEntry>();
-        feedComponent = new FeedServiceComponent(context, new ArrayList(Arrays.asList(feedUrlList)));
-        feedComponent.setObserver(observer);
+        feedComponent = new FeedServiceComponent(context,
+            new ArrayList(Arrays.asList(feedUrlList)), observer);
 
         // (new Thread(new Runnable(){
         //     @Override
