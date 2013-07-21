@@ -27,7 +27,7 @@ public class FeedListAdapter extends BaseAdapter {
 
     private final IFeedObserver observer = new IFeedObserver() {
         @Override
-        public void notifyDataSetChanged() {
+        public void sendNotifyDataSetChanged() {
             entryList = feedComponent.getEntryList();
             Logger.e();
 

@@ -33,7 +33,6 @@ public class Logger {
         final String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
         final String methodName = element.getMethodName();
         final int lineNumber = element.getLineNumber();
-        // メタ情報
         final String metaInfo = "[" + simpleClassName + "#" + methodName + ":" + lineNumber + "]";
         return metaInfo;
     }

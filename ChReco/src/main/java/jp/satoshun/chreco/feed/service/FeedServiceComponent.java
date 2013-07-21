@@ -50,7 +50,6 @@ public class FeedServiceComponent {
 
     public void unBindService(Activity context) {
         if (feedRetrieverService != null) {
-            Logger.e("test");
             context.unbindService(feedRetrieverConnection);
         }
     }
@@ -82,4 +81,5 @@ public class FeedServiceComponent {
     public List<SyndEntry> getEntryList() {
         return FeedRetrieverService.getEntryList();
     }
+
 }
