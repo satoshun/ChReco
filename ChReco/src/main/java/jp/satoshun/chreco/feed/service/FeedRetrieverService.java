@@ -28,24 +28,29 @@ public class FeedRetrieverService extends Service {
 
     private final IFeedRetrieverService.Stub binder = new IFeedRetrieverService.Stub() {
         @Override
-        public void retriveSyndEntryList(List<String> feedUrlList) {
-            Logger.e();
+        public void retriveSyndEntryList(final List<String> feedUrlList) {
+            (new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final RssAtomFeedRetriever retriever = new RssAtomFeedRetriever();
+                    List<SyndEntry> _entryList = new ArrayList<SyndEntry>();
 
-            final RssAtomFeedRetriever retriever = new RssAtomFeedRetriever();
-            entryList = new ArrayList<SyndEntry>();
-            
-            for (String feedUrl : feedUrlList) {
-                SyndFeed feed = retriever.getMostRecentNews(feedUrl);
-                entryList.addAll((List<SyndEntry>) feed.getEntries());
-            }
+                    for (String feedUrl : feedUrlList) {
+                        SyndFeed feed = retriever.getMostRecentNews(feedUrl);
+                        _entryList.addAll((List<SyndEntry>) feed.getEntries());
+                    }
 
-            if (observer != null) {
-                try {
-                    observer.notifyDataSetChanged();
-                } catch(RemoteException e) {
-                    e.printStackTrace();
+                    entryList = _entryList;
+
+                    if (observer != null) {
+                        try {
+                            observer.sendNotifyDataSetChanged();
+                        } catch(RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            }
+            })).start();
         }
 
         @Override
