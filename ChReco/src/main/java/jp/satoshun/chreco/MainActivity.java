@@ -16,7 +16,7 @@ import android.widget.ListView;
 import jp.satoshun.chreco.feed.FeedListAdapter;
 import jp.satoshun.chreco.libs.Logger;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements IDefs {
     FeedListAdapter feedListAdapter;
     Dialog dialog = null;
     String[] feedUrlList;
@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
     }
 
     private void setBroadCastReceiver() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(mFinishRetriverReceiver, new IntentFilter("finish-feed-retriever"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFinishRetriverReceiver, new IntentFilter(FEED_RETRIVER));
     }
 
     private void releaseBroadCastReceiver() {

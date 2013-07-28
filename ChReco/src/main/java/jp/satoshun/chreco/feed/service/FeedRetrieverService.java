@@ -8,10 +8,10 @@ package jp.satoshun.chreco.feed.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
+import jp.satoshun.chreco.IDefs;
 import jp.satoshun.chreco.feed.RssAtomFeedRetriever;
 import jp.satoshun.chreco.libs.Logger;
 import jp.satoshun.chreco.service.IFeedObserver;
@@ -19,7 +19,7 @@ import jp.satoshun.chreco.service.IFeedObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedRetrieverService extends Service {
+public class FeedRetrieverService extends Service implements IDefs {
     private static List<SyndEntry> entryList;
     public static List<SyndEntry> getEntryList() {
         return entryList;
@@ -54,7 +54,7 @@ public class FeedRetrieverService extends Service {
     };
 
     private void sendMessage() {
-        Intent intent = new Intent("finish-feed-retriever");
+        Intent intent = new Intent(FEED_RETRIVER);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
