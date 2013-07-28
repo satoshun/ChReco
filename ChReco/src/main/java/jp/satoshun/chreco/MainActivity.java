@@ -2,25 +2,38 @@ package jp.satoshun.chreco;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import jp.satoshun.chreco.feed.FeedListAdapter;
+import jp.satoshun.chreco.libs.Logger;
 
 public class MainActivity extends Activity {
     FeedListAdapter feedListAdapter;
     Dialog dialog = null;
     String[] feedUrlList;
 
+    private BroadcastReceiver mFinishRetriverReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!isFinishing()) {
+                Logger.e();
+                feedListAdapter.sendNotifyDataSetChanged();
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        allocFeedListAdapter();
-        allocDialog();
     }
 
     @Override
@@ -38,9 +51,15 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        if (dialog == null) {
+            allocDialog();
+        }
+
         if (feedUrlList == null || feedListAdapter == null) {
             allocFeedListAdapter();
         }
+
+        setBroadCastReceiver();
         setContentView(createList(this));
     }
 
@@ -54,7 +73,16 @@ public class MainActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
 
+        releaseBroadCastReceiver();
         releaseFeedListAdapter();
+    }
+
+    private void setBroadCastReceiver() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFinishRetriverReceiver, new IntentFilter("finish-feed-retriever"));
+    }
+
+    private void releaseBroadCastReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFinishRetriverReceiver);
     }
 
     private View createList(final Activity context) {

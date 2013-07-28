@@ -9,6 +9,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import jp.satoshun.chreco.feed.RssAtomFeedRetriever;
@@ -41,14 +42,7 @@ public class FeedRetrieverService extends Service {
                     }
 
                     entryList = _entryList;
-
-                    if (observer != null) {
-                        try {
-                            observer.sendNotifyDataSetChanged();
-                        } catch(RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    sendMessage();
                 }
             })).start();
         }
@@ -58,6 +52,11 @@ public class FeedRetrieverService extends Service {
             observer = target;
         }
     };
+
+    private void sendMessage() {
+        Intent intent = new Intent("finish-feed-retriever");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 
     @Override
     public void onCreate() {

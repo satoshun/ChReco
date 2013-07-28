@@ -2,6 +2,7 @@ package jp.satoshun.chreco.feed;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,7 +16,6 @@ import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.Syn
 import jp.satoshun.chreco.R;
 import jp.satoshun.chreco.WebViewActivity;
 import jp.satoshun.chreco.feed.service.FeedServiceComponent;
-import jp.satoshun.chreco.libs.Logger;
 import jp.satoshun.chreco.service.IFeedObserver;
 
 import java.util.ArrayList;
@@ -27,30 +27,16 @@ public class FeedListAdapter extends BaseAdapter {
     private FeedServiceComponent feedComponent;
     private Activity context;
 
-    private final IFeedObserver observer = new IFeedObserver() {
-        @Override
-        public void sendNotifyDataSetChanged() {
-            entryList = feedComponent.getEntryList();
-
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    notifyDataSetChanged();
-                }
-            });
-        }
-
-        @Override
-        public IBinder asBinder() {
-            return null;
-        }
-    };
+    public void sendNotifyDataSetChanged() {
+        entryList = feedComponent.getEntryList();
+        notifyDataSetChanged();
+    }
 
     public FeedListAdapter(final Activity context, final String[] feedUrlList) {
         this.context = context;
         entryList = new ArrayList<SyndEntry>();
         feedComponent = new FeedServiceComponent(context,
-            new ArrayList(Arrays.asList(feedUrlList)), observer);
+            new ArrayList(Arrays.asList(feedUrlList)));
     }
 
     public List<SyndEntry> getEntryList() {

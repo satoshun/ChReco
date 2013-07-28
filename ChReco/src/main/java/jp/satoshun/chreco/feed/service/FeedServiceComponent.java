@@ -14,15 +14,13 @@ import jp.satoshun.chreco.service.IFeedObserver;
 import java.util.List;
 
 public class FeedServiceComponent {
-    private final IFeedObserver observer;
     private IFeedRetrieverService feedRetrieverService;
     private List<String> feedUrlList;
 
     public FeedServiceComponent(final Activity context,
-        List<String> feedUrlList, IFeedObserver observer) {
+        List<String> feedUrlList) {
         bindService(context);
         this.feedUrlList = feedUrlList;
-        this.observer = observer;
     }
 
     private ServiceConnection feedRetrieverConnection = new ServiceConnection() {
@@ -31,7 +29,6 @@ public class FeedServiceComponent {
         public void onServiceConnected(ComponentName name, IBinder service) {
             Logger.e();
             feedRetrieverService = IFeedRetrieverService.Stub.asInterface(service);
-            setObserver(observer);
             retriveSyndEntryList(feedUrlList);
         }
 
@@ -65,21 +62,7 @@ public class FeedServiceComponent {
         }
     }
 
-    /*
-     * set service
-     */
-    public void setObserver(IFeedObserver target) {
-        if (feedRetrieverService != null) {
-            try {
-                feedRetrieverService.setObserver(target);
-            } catch(RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public List<SyndEntry> getEntryList() {
         return FeedRetrieverService.getEntryList();
     }
-
 }
