@@ -12,4 +12,5 @@
         android:max="10000"
         android:layout_marginRight="12dip"
         />
+
 </FrameLayout>

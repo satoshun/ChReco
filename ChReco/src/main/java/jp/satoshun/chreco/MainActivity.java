@@ -18,29 +18,9 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        feedUrlList = getResources().getStringArray(R.array.feed_url_list);
 
-        dialog = DialogManager.getInstance(this);
-
-        setContentView(createList());
-    }
-
-    private View createList() {
-        LinearLayout mainPanel = new LinearLayout(this);
-        ListView listView = new ListView(this);
-
-        feedListAdapter = new FeedListAdapter(this, feedUrlList);
-        
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
-                feedListAdapter.click(position);
-            }
-        });
-
-        listView.setAdapter(feedListAdapter);
-        mainPanel.addView(listView);
-
-        return mainPanel;
+        allocFeedListAdapter();
+        allocDialog();
     }
 
     @Override
@@ -56,8 +36,55 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (feedUrlList == null || feedListAdapter == null) {
+            allocFeedListAdapter();
+        }
+        setContentView(createList(this));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releaseFeedListAdapter();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        feedListAdapter.unBindService(this);
+
+        releaseFeedListAdapter();
+    }
+
+    private View createList(final Activity context) {
+        LinearLayout mainPanel = new LinearLayout(context);
+        ListView listView = new ListView(context);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+                feedListAdapter.click(position);
+            }
+        });
+
+        listView.setAdapter(feedListAdapter);
+        mainPanel.addView(listView);
+
+        return mainPanel;
+    }
+
+    private void allocFeedListAdapter() {
+        feedUrlList = getResources().getStringArray(R.array.feed_url_list);
+        feedListAdapter = new FeedListAdapter(this, feedUrlList);
+    }
+
+    private void releaseFeedListAdapter() {
+        if (feedListAdapter != null) {
+            feedListAdapter.unBindService(this);
+        }
+    }
+
+    private void allocDialog() {
+        dialog = DialogManager.getInstance(this);
     }
 }

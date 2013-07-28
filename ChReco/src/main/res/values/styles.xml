@@ -16,4 +16,13 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="LargeFont">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:shadowColor">#5555ff</item>
+        <item name="android:shadowRadius">1.5</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

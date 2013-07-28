@@ -1,3 +1,9 @@
+/* DialogManager
+ *
+ * singleton class
+ */
+
+
 package jp.satoshun.chreco;
 
 

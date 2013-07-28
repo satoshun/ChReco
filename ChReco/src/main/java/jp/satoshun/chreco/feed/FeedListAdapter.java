@@ -2,15 +2,17 @@ package jp.satoshun.chreco.feed;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
+import jp.satoshun.chreco.R;
 import jp.satoshun.chreco.WebViewActivity;
 import jp.satoshun.chreco.feed.service.FeedServiceComponent;
 import jp.satoshun.chreco.libs.Logger;
@@ -29,7 +31,6 @@ public class FeedListAdapter extends BaseAdapter {
         @Override
         public void sendNotifyDataSetChanged() {
             entryList = feedComponent.getEntryList();
-            Logger.e();
 
             context.runOnUiThread(new Runnable() {
                 @Override
@@ -50,27 +51,6 @@ public class FeedListAdapter extends BaseAdapter {
         entryList = new ArrayList<SyndEntry>();
         feedComponent = new FeedServiceComponent(context,
             new ArrayList(Arrays.asList(feedUrlList)), observer);
-
-        // (new Thread(new Runnable(){
-        //     @Override
-        //     public void run() {
-        //         SyndFeed feed;
-        //         //  TODO
-        //         for (String feedUrl : feedUrlList) {
-        //             feed = feedRetriever.getMostRecentNews(feedUrl);
-        //             for (Object entry : feed.getEntries()) {
-        //                 entryList.add((SyndEntry) entry);
-        //             }
-        //         }
-        //         context.runOnUiThread(new Runnable() {
-        //             @Override
-        //             public void run() {
-        //                 notifyDataSetChanged();
-        //             }
-        //         });
-        //     }
-        // })).start();
-
     }
 
     public List<SyndEntry> getEntryList() {
@@ -105,58 +85,26 @@ public class FeedListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int index, View cellRenderer, ViewGroup viewGroup) {
-        NewsEntryCellView newsEntryCellView = (NewsEntryCellView) cellRenderer;
-
-        if (cellRenderer == null) {
-            newsEntryCellView = new NewsEntryCellView();
+        View v = cellRenderer;
+        if (v == null) {
+            LayoutInflater inflater = (LayoutInflater)
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = inflater.inflate(R.layout.activity_list_cell, null);
+            setText(v, index);
         }
 
-        newsEntryCellView.display(index);
-        return newsEntryCellView;
+        return v;
+    }
+
+    void setText(View v, int index) {
+        SyndEntry entry = getItem(index);
+        TextView titleTextView = (TextView) v.findViewById(R.id.title_view);
+        titleTextView.setText(entry.getTitle());
     }
 
     public void click(int position) {
         Intent i = new Intent(context, WebViewActivity.class);
         i.setData(Uri.parse(getItem(position).getLink()));
         context.startActivity(i);
-    }
-
-    private class NewsEntryCellView extends TableLayout {
-        private TextView titleTextView;
-        private TextView summaryTextView;
-
-        public NewsEntryCellView() {
-            super(context);
-            createUI();
-        }
-
-        private void createUI() {
-            setTableLayout();
-            addTitle();
-        }
-
-        private void setTableLayout() {
-            setColumnShrinkable(0, false);
-            setColumnStretchable(0, true);
-            setPadding(10, 10, 10, 10);
-        }
-
-        private void addTitle() {
-            titleTextView = new TextView(context);
-            titleTextView.setPadding(10, 10, 10, 10);
-            addView(titleTextView);
-        }
-
-        private void addSummary() {
-            summaryTextView = new TextView(context);
-            summaryTextView.setPadding(10, 10, 10, 10);
-            addView(summaryTextView);
-        }
-
-        public void display(int index) {
-            SyndEntry entry = getItem(index);
-            titleTextView.setText(entry.getTitle());
-            // summaryTextView.setText(entry.getDescription().getValue());
-        }
     }
 }

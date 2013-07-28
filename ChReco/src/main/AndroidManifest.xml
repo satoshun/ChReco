@@ -35,8 +35,15 @@
             </intent-filter>
         </activity>
 
+<!--         
+        <service
+            android:name="jp.satoshun.chreco.feed.service.FeedRetrieverService"
+            android:isolatedProcess="true"
+            android:process=".service" />
+ -->
         <service
             android:name="jp.satoshun.chreco.feed.service.FeedRetrieverService" />
+
     </application>
     
     <uses-permission android:name="android.permission.INTERNET"/>
