@@ -14,6 +14,12 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
+
+    instrumentTestCompile "com.google.dexmaker:dexmaker:1.0"
+    instrumentTestCompile ("com.google.dexmaker:dexmaker-mockito:1.0") {
+        exclude group: 'org.mockito'
+    }
+    instrumentTestCompile "org.mockito:mockito-all:1.9.5"
 }
 
 android {
@@ -25,19 +31,48 @@ android {
         targetSdkVersion 16
     }
 
-    buildTypes {
-//        release {
-//            runProguard true
-            //proguardFile getDefaultProguardFile('proguard-android.txt')
-        //}
+    signingConfigs {
+        release
     }
-    productFlavors {
 
+    buildTypes {
+        debug {
+            packageNameSuffix ".debug"
+        }
+
+        release {
+            packageNameSuffix ".release"
+            signingConfig signingConfigs.release
+
+            // runProguard true
+            // proguardFile getDefaultProguardFile('proguard-android.txt')
+            // proguardFile file('proguard-android.txt')
+        }
+    }
+
+    productFlavors {
     }
 }
+
+if (project.hasProperty('storeFile')) {
+    android.signingConfigs.release.storeFile = file(storeFile)
+}
+if (project.hasProperty('storePassword')) {
+    android.signingConfigs.release.storePassword = storePassword
+}
+if (project.hasProperty('keyAlias')) {
+    android.signingConfigs.release.keyAlias = keyAlias
+}
+if (project.hasProperty('keyPassword')) {
+    android.signingConfigs.release.keyPassword = keyPassword
+}
+
 
 task test(dependsOn: "connectedInstrumentTest") << {
 }
 
 task debug(dependsOn: "installDebug") << {
+}
+
+task release(dependsOn: "assembleRelease") << {
 }

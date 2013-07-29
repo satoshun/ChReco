@@ -14,7 +14,6 @@ import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.Syn
 import jp.satoshun.chreco.IDefs;
 import jp.satoshun.chreco.feed.RssAtomFeedRetriever;
 import jp.satoshun.chreco.libs.Logger;
-import jp.satoshun.chreco.service.IFeedObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,6 @@ public class FeedRetrieverService extends Service implements IDefs {
     public static List<SyndEntry> getEntryList() {
         return entryList;
     }
-
-    private IFeedObserver observer;
 
     private final IFeedRetrieverService.Stub binder = new IFeedRetrieverService.Stub() {
         @Override
@@ -45,11 +42,6 @@ public class FeedRetrieverService extends Service implements IDefs {
                     sendMessage();
                 }
             })).start();
-        }
-
-        @Override
-        public void setObserver(IFeedObserver target) {
-            observer = target;
         }
     };
 
