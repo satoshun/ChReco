@@ -110,7 +110,7 @@ public class FeedListAdapter extends BaseAdapter {
                 Map<String, String> sendData = new HashMap<String, String>();
                 sendData.put("user_id", User.getId(context));
                 sendData.put("title", getTitle(index));
-                MyHttp.post(IDefs.BASE_URL, sendData);
+                MyHttp.post(IDefs.PUT_USER_ACCESS_URL, sendData);
             }
         })).start();
     }
