@@ -2,25 +2,30 @@ package jp.satoshun.chreco.feed;
 
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.IBinder;
+import android.os.UserManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
-import jp.satoshun.chreco.R;
-import jp.satoshun.chreco.WebViewActivity;
-import jp.satoshun.chreco.feed.service.FeedServiceComponent;
-import jp.satoshun.chreco.service.IFeedObserver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import jp.satoshun.chreco.IDefs;
+import jp.satoshun.chreco.R;
+import jp.satoshun.chreco.WebViewActivity;
+import jp.satoshun.chreco.feed.service.FeedServiceComponent;
+import jp.satoshun.chreco.libs.MyHttp;
+import jp.satoshun.chreco.libs.User;
 
 public class FeedListAdapter extends BaseAdapter {
     private List<SyndEntry> entryList;
@@ -83,14 +88,30 @@ public class FeedListAdapter extends BaseAdapter {
     }
 
     void setText(View v, int index) {
-        SyndEntry entry = getItem(index);
         TextView titleTextView = (TextView) v.findViewById(R.id.title_view);
-        titleTextView.setText(entry.getTitle());
+        titleTextView.setText(getTitle(index));
     }
 
-    public void click(int position) {
+    private String getTitle(int index) {
+        return getItem(index).getTitle();
+    }
+
+    public void click(int index) {
         Intent i = new Intent(context, WebViewActivity.class);
-        i.setData(Uri.parse(getItem(position).getLink()));
+
+        i.setData(Uri.parse(getItem(index).getLink()));
         context.startActivity(i);
+    }
+
+    private void post(final int index) {
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> sendData = new HashMap<String, String>();
+                sendData.put("user_id", User.getId(context));
+                sendData.put("title", getTitle(index));
+                MyHttp.post(IDefs.BASE_URL, sendData);
+            }
+        })).start();
     }
 }

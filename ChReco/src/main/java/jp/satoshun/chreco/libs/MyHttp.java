@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-class MyHttp {
+public class MyHttp {
     public static String post(String url, Map<String, String> params) {
         HttpResponse res = getHttpResponsePost(url, params);
         return getResponseData(res);
