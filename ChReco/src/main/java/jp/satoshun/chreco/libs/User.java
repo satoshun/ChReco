@@ -5,9 +5,10 @@ import android.content.Context;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
-class UserManager {
+public class User {
     private static String userId = null;
-    public static String UserId(Context context) {
+
+    public static String getId(Context context) {
         if (userId != null) return userId;
 
         String userId = getIMEI(context);
