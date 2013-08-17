@@ -10,11 +10,11 @@ public class FeedEntry {
         this.link = link;
     }
 
-    public void getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void getLink() {
+    public String getLink() {
         return link;
     }
 }
